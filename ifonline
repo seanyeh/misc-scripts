@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Sean Yeh
+#
+# Usage: ifonline some_command
+#   If online, will run command. else, wait 10 secs and retry
+
+check_online () {
+    wget -q --spider  http://google.com
+    echo $?
+}
+
+while [[ $(check_online) -ne 0 ]]; do
+    sleep 10
+done
+
+$*
