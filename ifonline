@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Sean Yeh
 #
@@ -10,7 +10,7 @@ check_online () {
     echo $?
 }
 
-while [[ $(check_online) -ne 0 ]]; do
+while [ `check_online` -ne 0 ]; do
     sleep 10
 done
 
