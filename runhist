@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Usage:
+#   runhist <(history 1) search
+
+while IFS= read line
+do
+    cmd="`echo "$line" | sed "s/^\s*[0-9\*]\+\s\+//"`"
+    commands[$index]="$cmd"
+    ((index++))
+done < <( cat $1 | grep "$2" )
+
+num_commands=${#commands[@]}
+
+# Display commands using reverse numbering order
+for (( i=0; i<${num_commands}; i++ ));
+do
+    echo "$(($num_commands-$i)): ${commands[$i]}"
+done
+
+echo -e "\n============"
+echo "Enter command number"
+printf ":"
+read commandnum
+
+cmd=${commands[$(($num_commands-$commandnum))]}
+
+echo -e "\nRunning command: $cmd"
+
+$cmd
