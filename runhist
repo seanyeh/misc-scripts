@@ -3,7 +3,7 @@
 # Usage:
 #   runhist <(history 1) search
 
-while IFS= read line
+while IFS= read -r line
 do
     cmd="`echo "$line" | sed "s/^\s*[0-9\*]\+\s\+//"`"
     commands[$index]="$cmd"
