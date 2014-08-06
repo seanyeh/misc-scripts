@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Open the files listed in the .project file (one per line) with your favorite
+# text editor.
+#
+# Uses $EDITOR by default, or provide the editor as an argument
+#
+# Example .project file:
+#   *.html
+#   *.js
+#   *.css
+# Run "project" to open all html, js, and css files in the directory
+
+cmd="$1"
+[ "$#" -eq 0 ] && cmd="$EDITOR"
+
+if [ -e ".project" ]; then
+    OIFS=$IFS
+    while IFS= ; read -r line; do
+        IFS=$OIFS
+        cmd="$cmd $line"
+    done < ".project"
+    IFS=$OIFS
+
+    eval $cmd
+else
+    echo ".project file not found"
+    return 1
+fi
