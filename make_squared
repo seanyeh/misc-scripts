@@ -1,0 +1,23 @@
+#!/bin/sh
+
+find_makefile(){
+    curpath="`pwd`"
+
+    while [ "$curpath" != "/" ]; do
+        makefile="$curpath/Makefile"
+        if [ -f "$makefile" ]; then
+            return 0
+        fi
+
+        curpath=`dirname "$curpath"`
+    done
+
+    return 1
+}
+
+if find_makefile; then
+    echo -e "Using Makefile: $makefile\n"
+    make -f "$makefile" $*
+else
+    echo "Makefile not found"
+fi
