@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# readpw [-h | --help]
+# readpw [OPTIONAL_MSG]
+#
+# A small script to read a password input and print it out
+#
+# An example of this being useful is to avoid hardcoding passwords in
+# environment variables.
+#   MYPASSWORD=$(readpw) ./myprog
+#
+# Also useful in scripts that require password input.
+#
+# Unlike using read -s, this solution aims to be portable.
+#
+# Obviously, if you run readpw by itself, it will print out the password in
+# plain text, which is most likely what you don't want.
+#
+# License: Do whatever you want with it
+
+
+main() {
+    if [ -z "$1" ]; then
+        msg="Password:"
+    else
+        msg="$1"
+    fi
+
+    printf -- "$msg" 1>&2
+    stty -echo
+    read pw
+    stty echo
+
+    printf "\n" 1>&2
+
+    printf -- "$pw"
+}
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    printf "readpw [OPTIONAL_MSG]\n"
+    printf "readpw [-h | --help]\n\n"
+    printf "A small script to read a password input and print it out.\n"
+    printf "\tOPTIONAL_MSG defaults to \"Password:\" if not provided.\n\n"
+    printf "Example usage:\n"
+    printf "\tMYPASSWORD=\$(readpw \"Enter your password:\") myprogram\n"
+    printf "\t(to avoid hardcoding passwords in environment variables)\n"
+else
+    main "$1"
+fi
