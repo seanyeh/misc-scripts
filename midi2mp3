@@ -9,8 +9,8 @@ if [ -z "$infile" ]; then
 fi
 
 if [ -z "$outfile" ]; then
-    outfile=$(echo "$infile" | sed -e 's/\.[^.]*$//')
-    echo "No outfile provided. Will default to: $outfile.mp3"
+    outfile="$(echo "$infile" | sed -e 's/\.[^.]*$//').mp3"
+    echo "No outfile provided. Will default to: $outfile"
 fi
 
 timidity "$infile" -Ow -o - | ffmpeg -i - -acodec libmp3lame -ab 256k "$outfile"
