@@ -1,0 +1,16 @@
+#!/bin/sh
+
+infile="$1"
+outfile="$2"
+
+if [ -z "$infile" ]; then
+    echo "Usage: midi2mp3 INFILE [OUTFILE]"
+    exit
+fi
+
+if [ -z "$outfile" ]; then
+    outfile=$(echo "$infile" | sed -e 's/\.[^.]*$//')
+    echo "No outfile provided. Will default to: $outfile.mp3"
+fi
+
+timidity "$infile" -Ow -o - | ffmpeg -i - -acodec libmp3lame -ab 256k "$outfile"
