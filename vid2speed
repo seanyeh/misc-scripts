@@ -1,0 +1,25 @@
+#!/bin/sh
+
+infile="$1"
+speed="$2"
+outfile="$3"
+
+if [ -z "$infile" ] || [ -z "$speed" ] || [ -z "$outfile" ]; then
+    printf "Usage: vid2speed VIDEO_FILE SPEED_MULTIPLIER OUTFILE\n"
+    exit
+fi
+
+# Get inverted speed multiplier
+ispeed=`printf "scale=4; 1 / $speed \n" | bc -l`
+
+extension=`printf "$infile" | awk -F . '{print $NF}'`
+codecs=""
+if [ "mp4" = "$extension" ]; then
+    codecs="-c:v libx264 -crf 18 -c:a aac -b:a 160k"
+elif [ "webm" = "$extension" ]; then
+    codecs="-c:v libvpx -crf 8 -b:v 1M"
+fi
+
+ffmpeg -i "$infile" \
+    -filter_complex "[0:v]setpts=$ispeed*PTS[v];[0:a]atempo=$speed[a]" \
+    -map "[v]" -map "[a]" $codecs "$outfile"
