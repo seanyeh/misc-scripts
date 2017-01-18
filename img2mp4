@@ -1,0 +1,19 @@
+#!/bin/sh
+
+imgfile="$1"
+audiofile="$2"
+outfile="$3"
+
+if [ -z "$imgfile" ] || [ -z "$audiofile" ]; then
+    echo "Usage: img2mp4 IMGFILE AUDIOFILE [OUTFILE]"
+    exit
+fi
+
+if [ -z "$outfile" ]; then
+    outfile="$(echo "$audiofile" | sed -e 's/\.[^.]*$//').mp4"
+    echo "No outfile provided. Will default to: $outfile"
+fi
+
+ffmpeg -loop 1 -i "$imgfile" -i "$audiofile" \
+    -c:v libx264 -tune stillimage -c:a aac -b:a 192k -b:a 192k \
+    -pix_fmt yuv420p -shortest "$outfile"
