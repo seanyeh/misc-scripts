@@ -1,0 +1,25 @@
+#!/bin/sh
+
+_getdir() {
+    base="$1"
+    counter=1
+
+    dirname="$base"
+    while [ -d "$dirname" ] || [ -f "$dirname" ]; do
+        counter=`printf "$counter + 1 \n" | bc`
+        dirname="$base""$counter"
+    done
+
+    printf "$dirname"
+}
+
+
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$2" ] ; then
+    printf "Usage: mknewdir BASE_DIRNAME\n"
+    exit
+fi
+
+dirname=`_getdir "$1"`
+mkdir -p "$dirname"
+
+printf "$dirname"
