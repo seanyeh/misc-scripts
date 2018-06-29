@@ -1,0 +1,25 @@
+#!/bin/sh
+
+vidfile="$1"
+outfile="$2"
+start_ts="$3"
+
+if [ -z "$vidfile" ]; then
+    echo "Usage: vidthumb VIDEO_FILE [OUTPUT_IMAGE_FILE] [START_TIMESTAMP]"
+    exit
+fi
+
+if [ -z "$outfile" ]; then
+    outfile="$(echo "$vidfile" | sed -e 's/\.[^.]*$//')_thumb.png"
+    echo "No outfile provided. Will default to: $outfile"
+fi
+
+if [ -z "$start_ts" ]; then
+    start_ts="0"
+fi
+
+ffmpeg -i "$vidfile" -vframes 1 -f image2 -ss "$start_ts" "$outfile"
+
+if [ $? -eq 0 ]; then
+    echo "Thumbnail saved to: "$outfile""
+fi
