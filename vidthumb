@@ -1,17 +1,12 @@
 #!/bin/sh
 
 vidfile="$1"
-outfile="$2"
-start_ts="$3"
+start_ts="$2"
+outfile="$(echo "$vidfile" | sed -e 's/\.[^.]*$//')_thumb.png"
 
 if [ -z "$vidfile" ]; then
     echo "Usage: vidthumb VIDEO_FILE [OUTPUT_IMAGE_FILE] [START_TIMESTAMP]"
     exit
-fi
-
-if [ -z "$outfile" ]; then
-    outfile="$(echo "$vidfile" | sed -e 's/\.[^.]*$//')_thumb.png"
-    echo "No outfile provided. Will default to: $outfile"
 fi
 
 if [ -z "$start_ts" ]; then
