@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Downloads icons from FontAwesome as svg files.
+# Files retrieved from https://github.com/seanyeh/fontawesome-svgs/
+
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    printf "Downloads icons from FontAwesome as svg files\n"
+    printf "Usage: dlfa ICON_NAME\n"
+    exit
+fi
+
+url="https://raw.githubusercontent.com/seanyeh/fontawesome-svgs/master/svg/$1.svg"
+
+if wget --spider "$url" 2>/dev/null; then
+    wget "$url"
+else
+    printf "Icon does not exist.\n";
+fi
