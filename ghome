@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+
+__ghome_getdir() {
+    curdir="$(pwd)"
+
+    while [ "$curdir" != "$(dirname "$curdir")" ]; do
+        curdir="$(dirname "$curdir")"
+        [ -d "$curdir/.git" ] && printf "$curdir" && break
+    done
+}
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    printf "ghome [-v | --verbose]\n"
+    printf "ghome [-h | --help]\n\n"
+    exit 0
+fi
+
+__ghome_result="$(__ghome_getdir)"
+if [ "$1" = "-v" ] || [ "$1" = "--verbose" ]; then
+    if [ -n "$__ghome_result" ]; then
+        printf "$__ghome_result\n"
+    else
+        printf ".git not found\n"
+    fi
+fi
+
+[ -n "$__ghome_result" ] && cd "$__ghome_result"
