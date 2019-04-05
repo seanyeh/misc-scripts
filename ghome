@@ -1,11 +1,11 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 __ghome_getdir() {
     curdir="$(pwd)"
 
     while [ "$curdir" != "$(dirname "$curdir")" ]; do
         curdir="$(dirname "$curdir")"
-        [ -d "$curdir/.git" ] && printf "$curdir" && break
+        ([ -d "$curdir/.git" ] || [ -f "$curdir/.git" ]) && printf "$curdir" && break
     done
 }
 
